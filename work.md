@@ -26,7 +26,7 @@
 
 ### 技术栈
 - 主力：Python + Shell脚本 + 飞书API
-- Agent框架：OpenClaw / Hermes / Claude Code
+- Agent框架：OpenClaw / Hermes / Hermes Agent
 - 数据：SQLite + 向量数据库 + 飞书多维表格
 - 部署：腾讯云 + Docker + systemd
 

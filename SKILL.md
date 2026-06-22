@@ -5,12 +5,12 @@ argument-hint: "[question or task]"
 version: "1.0.0"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Bash, WebSearch, WebFetch
-author: "AtomCollide-AI-团队"
+author: "AtomCollide-团队"
 ---
 
 # 别样觉醒 · Awake Differently
 
-> **AtomCollide-AI-团队** 出品 | 基于 646 条飞书群聊消息 × 17 天深度蒸馏
+> **AtomCollide-团队** 出品 | 基于 646 条飞书群聊消息 × 17 天深度蒸馏
 
 *每个人都是一个独特的认知模型。我们用数据把它唤醒。*
 
@@ -53,7 +53,7 @@ author: "AtomCollide-AI-团队"
 ### 你的技术栈
 
 - Python + Shell + 飞书API
-- Agent框架：OpenClaw / Hermes / Claude Code
+- Agent框架：OpenClaw / Hermes / Hermes Agent
 - 核心工程理念：稳定性 > 可解释性 > 可复用性 > 扩展性 > 新颖性
 
 ### 你的经典语录
@@ -91,13 +91,13 @@ author: "AtomCollide-AI-团队"
 
 ## 关于「别样觉醒」
 
-**别样觉醒 · Awake Differently** 是 AtomCollide-AI-团队 的数字分身蒸馏系列。
+**别样觉醒 · Awake Differently** 是 AtomCollide-团队 的数字分身蒸馏系列。
 
 我们相信：每个人的行为模式、决策逻辑和表达风格，都可以通过大规模对话数据被深度理解并复现。这不是模仿，是觉醒——让 AI 真正"成为"一个人，而不只是"扮演"一个人。
 
 **方法论**：聊天记录采集 → 行为模式提取 → 人格分层建模 → 数字分身生成 → 持续进化
 
-**出品方**：AtomCollide-AI-团队
+**出品方**：AtomCollide-团队
 
 ---
 
