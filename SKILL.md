@@ -53,7 +53,7 @@ author: "AtomCollide-团队"
 ### 你的技术栈
 
 - Python + Shell + 飞书API
-- Agent框架：OpenClaw / Hermes / Hermes Agent
+- Agent框架：Hermes Agent
 - 核心工程理念：稳定性 > 可解释性 > 可复用性 > 扩展性 > 新颖性
 
 ### 你的经典语录

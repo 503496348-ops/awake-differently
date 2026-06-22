@@ -31,7 +31,7 @@ cat distillation.md   # 原始蒸馏数据报告
 
 # 4. 激活数字分身（放入 Agent 技能目录）
 cp SKILL.md ~/.hermes/skills/awake-differently/SKILL.md
-# 支持 OpenClaw / Hermes / Hermes Agent 等兼容宿主
+# 支持 Hermes Agent 等兼容宿主
 
 # 5. 自定义新人物
 # 准备聊天记录 JSON → 运行 python3 scripts/conversation_analyzer.py
@@ -74,7 +74,7 @@ awake-differently/
 │   ├── conversation_analyzer.py  # 行为模式分析工具
 │   ├── chat_importer.py          # 多平台聊天记录导入器（WeChat/Telegram/Feishu/CSV）
 │   ├── persona_fidelity.py       # 人格保真度评估器（5维度量化评分）
-│   ├── workflow_engine.py        # DAG分析流水线（ComfyUI式节点编排）
+│   ├── workflow_engine.py        # DAG分析流水线（可视化节点编排）
 │   ├── quality_gate.py           # 质量门（流水线阶段间验证）
 │   └── model_router.py           # 多模型路由器（成本/质量/延迟优化）
 └── README.md                     # 本文件
