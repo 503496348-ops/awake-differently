@@ -2,7 +2,7 @@
 name: awake-differently
 description: "基于聊天记录深度蒸馏的数字分身/人物画像系统。当需要从聊天记录中提取人物特征、生成数字分身、分析用户画像时使用。"
 argument-hint: "[question or task]"
-version: "1.0.0"
+version: 1.1.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, Bash, WebSearch, WebFetch
 author: "AtomCollide-团队"
