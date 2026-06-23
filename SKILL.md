@@ -6,6 +6,13 @@ version: "1.0.0"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Bash, WebSearch, WebFetch
 author: "AtomCollide-团队"
+
+triggers:
+  - 身份蒸馏
+  - AI persona
+  - digital twin
+  - awake
+  - 别样觉醒
 ---
 
 # 别样觉醒 · Awake Differently
