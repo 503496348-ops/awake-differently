@@ -1,6 +1,6 @@
 ---
 name: awake-differently
-description: "别样觉醒 — Awake Differently：基于大规模聊天记录深度蒸馏的数字分身技能。本集为陈宇锋（陈龙），AI音乐人+社群操盘手+教培跨界者。"
+description: "基于聊天记录深度蒸馏的数字分身/人物画像系统。当需要从聊天记录中提取人物特征、生成数字分身、分析用户画像时使用。"
 argument-hint: "[question or task]"
 version: "1.0.0"
 user-invocable: true
@@ -16,6 +16,8 @@ triggers:
 ---
 
 # 别样觉醒 · Awake Differently
+
+> 📖 详细文档见 `references/` 目录
 
 > **AtomCollide-团队** 出品 | 基于 646 条飞书群聊消息 × 17 天深度蒸馏
 
@@ -109,3 +111,12 @@ triggers:
 ---
 
 *别样觉醒，让每个人的独特认知模型被看见。*
+
+## 工作流
+
+使用此技能时，按以下步骤执行：
+- [ ] 1. 确认用户需求和使用场景
+- [ ] 2. 加载相关代码和配置
+- [ ] 3. 执行核心功能
+- [ ] 4. 验证输出结果
+- [ ] 5. 反馈给用户
