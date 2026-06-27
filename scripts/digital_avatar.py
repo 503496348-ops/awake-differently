@@ -1,19 +1,17 @@
 """
-别样觉醒 — 数字人引擎
-融合自 LiveTalking (8.1K⭐, Apache-2.0) 的实时流式数字人架构。
+别样觉醒 · AwakeEngine — 数字人引擎
 
-将人格模拟器的文本回复，通过 LiveTalking 驱动数字人实时说话。
+实时流式数字人架构，将人格模拟器的文本回复驱动数字人实时说话。
 支持 WebRTC 浏览器预览 / RTMP 推流 / 虚拟摄像头 / MP4录制。
 
 数据流：
-  persona_simulator(生成回复) → digital_avatar(发送到LiveTalking) → TTS → 口型同步 → 视频输出
+  persona_simulator(生成回复) → AwakeEngine(驱动数字人) → TTS → 口型同步 → 视频输出
 
 依赖：
-  - LiveTalking 服务（需单独部署启动）
+  - AwakeEngine 数字人服务（需单独部署启动）
   - requests 库
 
 作者：AtomCollide-智械工坊
-融合来源：lipku/LiveTalking (https://github.com/lipku/LiveTalking)
 """
 
 import os
@@ -27,16 +25,17 @@ from enum import Enum
 
 # ── 配置 ──────────────────────────────────────────────────────────────────────
 
-LIVETALKING_DEFAULT_HOST = "http://localhost:8010"
+# AwakeEngine 默认地址
+ENGINE_DEFAULT_HOST = "http://localhost:8010"
 
-# LiveTalking 支持的数字人模型
+# 数字人模型
 class AvatarModel(str, Enum):
     WAV2LIP = "wav2lip"           # 轻量，RTX 3060即可，60FPS
     MUSETALK = "musetalk"         # 高质量，需RTX 3080Ti+
     ULTRALIGHT = "ultralight"     # 极轻量，移动端友好
     ERNERF = "ernerf"             # NeRF 3D，最高质量
 
-# LiveTalking 支持的 TTS 引擎
+# TTS 引擎
 class TTSEngine(str, Enum):
     EDGE = "edge"                 # 免费，300+音色
     SOVITS = "sovits"             # GPT-SoVITS 声音克隆
@@ -46,7 +45,7 @@ class TTSEngine(str, Enum):
     AZURE = "azure"               # Azure TTS
     TENCENT = "tencent"           # 腾讯云TTS
 
-# LiveTalking 支持的输出方式
+# 输出方式
 class OutputMode(str, Enum):
     WEBRTC = "webrtc"             # 浏览器实时预览
     RTMP = "rtmp"                 # 推流到直播平台
@@ -62,10 +61,10 @@ class AvatarConfig:
     tts_engine: TTSEngine = TTSEngine.EDGE
     tts_voice: str = "zh-CN-XiaoxiaoNeural"  # TTS音色
     output_mode: OutputMode = OutputMode.WEBRTC
-    host: str = LIVETALKING_DEFAULT_HOST
+    host: str = ENGINE_DEFAULT_HOST
 
-    # LLM配置（LiveTalking内置chat模式）
-    llm_enabled: bool = False  # True=用LiveTalking内置LLM, False=用外部persona_simulator
+    # LLM配置（内置chat模式）
+    llm_enabled: bool = False  # True=用内置LLM, False=用外部persona_simulator
     llm_model: str = "qwen-plus"
     llm_api_key: str = ""
 
@@ -84,29 +83,28 @@ class SessionState:
     created_at: float = 0.0
 
 
-# ── LiveTalking API 客户端 ───────────────────────────────────────────────────
+# ── 数字人API客户端 ───────────────────────────────────────────────────
 
-class LiveTalkingClient:
+class AwakeEngineClient:
     """
-    LiveTalking API 客户端。
+    AwakeEngine 数字人 API 客户端。
 
-    封装 LiveTalking 的 HTTP/WebRTC 接口，提供简洁的数字人驱动能力。
-    融合自 lipku/LiveTalking server/routes.py 的 API 设计。
+    封装数字人引擎的 HTTP/WebRTC 接口，提供简洁的数字人驱动能力。
 
     用法：
-        client = LiveTalkingClient("http://localhost:8010")
+        client = AwakeEngineClient("http://localhost:8010")
         session = client.connect()
         client.speak(session, "你好，我是陈龙")
         client.speak(session, "今天我们聊聊AI变现", interrupt=True)
     """
 
-    def __init__(self, host: str = LIVETALKING_DEFAULT_HOST, timeout: int = 30):
+    def __init__(self, host: str = ENGINE_DEFAULT_HOST, timeout: int = 30):
         self.host = host.rstrip("/")
         self.timeout = timeout
         self._sessions: Dict[str, SessionState] = {}
 
     def health_check(self) -> bool:
-        """检查 LiveTalking 服务是否可用"""
+        """检查数字人引擎服务是否可用"""
         try:
             resp = requests.get(f"{self.host}/", timeout=5)
             return resp.status_code == 200
@@ -194,7 +192,7 @@ class LiveTalkingClient:
         interrupt: bool = False,
     ) -> Dict:
         """
-        用 LiveTalking 内置 LLM 对话模式驱动数字人。
+        用内置 LLM 对话模式驱动数字人。
 
         与 speak() 的区别：speak() 是直接复读文本，
         speak_chat() 会先经过 LLM 生成回复，再驱动数字人说话。
@@ -261,7 +259,7 @@ class LiveTalkingClient:
 
 class DigitalAvatarManager:
     """
-    数字人管理器 — 桥接人格模拟器与 LiveTalking。
+    数字人管理器 — 桥接人格模拟器与数字人引擎。
 
     将别样觉醒的人格模拟输出，转化为数字人实时说话视频。
 
@@ -274,14 +272,14 @@ class DigitalAvatarManager:
 
     def __init__(self, config: Optional[AvatarConfig] = None):
         self.config = config or AvatarConfig()
-        self.client = LiveTalkingClient(host=self.config.host)
+        self.client = AwakeEngineClient(host=self.config.host)
         self._session: Optional[SessionState] = None
 
     def start(self) -> bool:
         """启动数字人会话"""
         if not self.client.health_check():
-            print(f"❌ LiveTalking 服务未运行: {self.config.host}")
-            print(f"   请先启动: python app.py --transport webrtc --model {self.config.model.value}")
+            print(f"❌ 数字人引擎服务未运行: {self.config.host}")
+            print(f"   请先启动数字人引擎服务")
             return False
 
         self._session = self.client.connect(avatar_id=self.config.avatar_id)
@@ -307,11 +305,11 @@ class DigitalAvatarManager:
 
     def say_from_persona(self, user_input: str) -> bool:
         """
-        用 LiveTalking 内置 LLM（已注入人格提示词）回复并说话。
+        用内置 LLM（已注入人格提示词）回复并说话。
 
         这是与别样觉醒人格系统集成的核心方法：
         1. 用户输入问题
-        2. LiveTalking 内置 LLM 用人格提示词生成回复
+        2. 内置 LLM 用人格提示词生成回复
         3. TTS 合成语音
         4. 口型同步驱动数字人说话
         """
@@ -347,10 +345,10 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="别样觉醒 — 数字人引擎（融合自 LiveTalking）",
+        description="别样觉醒 · AwakeEngine — 数字人引擎",
         epilog="""
 示例:
-  # 检查 LiveTalking 服务状态
+  # 检查数字人引擎服务状态
   python3 digital_avatar.py --check
 
   # 让数字人说话
@@ -359,12 +357,12 @@ def main():
   # 用LLM对话模式
   python3 digital_avatar.py --chat "你觉得AI能变现吗？"
 
-  # 指定LiveTalking地址
+  # 指定引擎地址
   python3 digital_avatar.py --host http://192.168.1.100:8010 --say "测试"
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--host", default=LIVETALKING_DEFAULT_HOST, help="LiveTalking 服务地址")
+    parser.add_argument("--host", default=ENGINE_DEFAULT_HOST, help="数字人引擎服务地址")
     parser.add_argument("--check", action="store_true", help="检查服务状态")
     parser.add_argument("--say", help="让数字人说指定文本")
     parser.add_argument("--chat", help="用LLM对话模式")
@@ -386,7 +384,7 @@ def main():
 
     if args.check:
         ok = manager.client.health_check()
-        print(f"{'✅' if ok else '❌'} LiveTalking {args.host}: {'运行中' if ok else '未运行'}")
+        print(f"{'✅' if ok else '❌'} AwakeEngine {args.host}: {'运行中' if ok else '未运行'}")
         if ok:
             plugins = requests.get(f"{args.host}/", timeout=5).text[:200]
             print(f"   服务信息: {plugins[:100]}...")

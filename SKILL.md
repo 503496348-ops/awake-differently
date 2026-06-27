@@ -96,7 +96,7 @@ triggers:
 | `persona.md` | 完整人格分层定义（5层结构 + 置信度标注） |
 | `work.md` | 工作能力、技术栈、决策流程 |
 | `distillation.md` | 原始蒸馏数据（646条消息分析报告） |
-| `scripts/digital_avatar.py` | 数字人引擎（融合自 LiveTalking） |
+| `scripts/digital_avatar.py` | 数字人引擎（AwakeEngine） |
 | `scripts/voice_profile.py` | 声音画像+音色推荐 |
 | `scripts/avatar_builder.py` | 数字人形象生成 |
 
@@ -109,6 +109,18 @@ triggers:
 
 ---
 
+## Quick Start
+
+1. 检查引擎状态: `python3 scripts/digital_avatar.py --check`
+2. 生成数字人形象: `python3 scripts/avatar_builder.py --video your_video.mp4 --avatar-id my_avatar`
+3. 配置声音画像: `python3 scripts/voice_profile.py --recommend --language zh --gender male`
+4. 让数字人说话: `python3 scripts/digital_avatar.py --say "你好"`
+5. 实时对话: `python3 scripts/digital_avatar.py --chat "你觉得AI能变现吗？"`
+
+**依赖**: Python >= 3.10, requests >= 2.28, GPU(RTX 3060+)
+
+---
+
 ## 关于「别样觉醒」
 
 **别样觉醒 · Awake Differently** 是 AtomCollide-团队 的数字分身蒸馏系列。
@@ -117,7 +129,7 @@ triggers:
 
 **方法论**：聊天记录采集 → 行为模式提取 → 人格分层建模 → 声音画像 → 数字形象 → 实时数字人
 
-**技术栈**：人格蒸馏(自有) + LiveTalking(实时引擎) + GPT-SoVITS(声音克隆) + Wav2Lip/MuseTalk(口型同步)
+**技术栈**：人格蒸馏(自有) + AwakeEngine(实时数字人引擎) + TTS(声音合成) + 口型同步
 
 **出品方**：AtomCollide-团队
 

@@ -14,7 +14,6 @@
   - 无额外依赖（Edge TTS部分复用 ideasphere 的 tts_dubbing.py）
 
 作者：AtomCollide-智械工坊
-融合来源：lipku/LiveTalking TTS模块 + Kedreamix/Linly-Talker VITS模块
 """
 
 import os
@@ -55,7 +54,7 @@ class VoiceProfile:
     style_tags: List[str] = field(default_factory=list)  # ["短句", "直接", "嘴毒"]
 
     def to_tts_config(self) -> Dict:
-        """转换为 LiveTalking TTS 透传配置"""
+        """转换为数字人引擎 TTS 透传配置"""
         config = {
             "voice": self.voice_id,
             "speed": self.speed,
@@ -84,7 +83,7 @@ class VoiceProfile:
 
 # ── 音色推荐表 ────────────────────────────────────────────────────────────────
 
-# 基于 LiveTalking + Edge TTS 的音色库
+# 音色推荐库
 # 按语言+性别+风格分类，从人格蒸馏自动匹配
 VOICE_RECOMMENDATIONS = {
     "zh": {

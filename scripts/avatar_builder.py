@@ -1,9 +1,9 @@
 """
-别样觉醒 — 数字人形象生成器
-对接 LiveTalking 的 Avatar 生成 API，从视频/照片创建数字人形象。
+别样觉醒 · AwakeEngine — 数字人形象生成器
+从视频/照片创建数字人形象。
 
-融合自 lipku/LiveTalking avatars/ 模块的生成流程：
-  上传视频/照片 → 人脸检测 → 特征提取 → 生成数字人形象 → 注册到 LiveTalking
+流程：
+  上传视频/照片 → 人脸检测 → 特征提取 → 生成数字人形象 → 注册到引擎
 
 支持：
   - 从视频生成（推荐：一段1-5分钟说话视频）
@@ -11,11 +11,10 @@
   - 形象管理（列表、删除）
 
 依赖：
-  - LiveTalking 服务运行中
+  - AwakeEngine 数字人引擎服务运行中
   - requests 库
 
 作者：AtomCollide-智械工坊
-融合来源：lipku/LiveTalking avatars/genavatar.py
 """
 
 import os
@@ -28,7 +27,8 @@ from typing import Optional, Dict, List
 
 # ── 配置 ──────────────────────────────────────────────────────────────────────
 
-LIVETALKING_DEFAULT_HOST = "http://localhost:8010"
+# AwakeEngine 默认地址
+ENGINE_DEFAULT_HOST = "http://localhost:8010"
 
 
 @dataclass
@@ -48,7 +48,7 @@ class AvatarBuilder:
     """
     数字人形象生成器。
 
-    对接 LiveTalking 的 /avatar/* API，从视频或照片生成数字人形象。
+    对接数字人引擎的 Avatar API，从视频或照片生成数字人形象。
 
     用法：
         builder = AvatarBuilder("http://localhost:8010")
@@ -63,12 +63,12 @@ class AvatarBuilder:
         builder.wait_for_completion(result.task_id)
     """
 
-    def __init__(self, host: str = LIVETALKING_DEFAULT_HOST, timeout: int = 300):
+    def __init__(self, host: str = ENGINE_DEFAULT_HOST, timeout: int = 300):
         self.host = host.rstrip("/")
         self.timeout = timeout
 
     def health_check(self) -> bool:
-        """检查 LiveTalking 服务是否可用"""
+        """检查数字人引擎服务是否可用"""
         try:
             resp = requests.get(f"{self.host}/", timeout=5)
             return resp.status_code == 200
@@ -100,7 +100,7 @@ class AvatarBuilder:
         if not self.health_check():
             return AvatarBuildResult(
                 status="failed",
-                message=f"LiveTalking 服务未运行: {self.host}",
+                message=f"数字人引擎服务未运行: {self.host}",
             )
 
         print(f"🎬 正在从视频生成数字人形象...")
@@ -130,7 +130,7 @@ class AvatarBuilder:
             )
 
         except requests.exceptions.HTTPError as e:
-            # 如果API不存在（LiveTalking版本不支持），提供手动方案
+            # 如果API不存在，提供手动方案
             if resp.status_code == 404:
                 return self._fallback_manual_guide(video_path, avatar_id, model)
             return AvatarBuildResult(status="failed", message=f"API错误: {e}")
@@ -189,7 +189,7 @@ class AvatarBuilder:
         """
         当 API 不可用时，提供手动操作指南。
 
-        LiveTalking 的 avatar 生成也可以通过 Web 页面操作：
+        数字人引擎的 avatar 生成也可以通过 Web 页面操作：
         访问 http://host:8010/avatar.html
         """
         guide = f"""
@@ -197,7 +197,7 @@ class AvatarBuilder:
 📋 手动生成数字人形象指南
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. 打开 LiveTalking Avatar 生成页面:
+1. 打开数字人引擎 Avatar 生成页面:
    {self.host}/avatar.html
 
 2. 上传素材: {media_path}
@@ -209,7 +209,7 @@ class AvatarBuilder:
 5. 点击"生成"，等待完成
 
 或使用命令行:
-   cd /path/to/LiveTalking
+   cd /path/to/AwakeEngine
    python app.py --model {model} --avatar_id {avatar_id}
 
 生成后的形象文件位于:
@@ -345,7 +345,7 @@ def main():
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--host", default=LIVETALKING_DEFAULT_HOST, help="LiveTalking 地址")
+    parser.add_argument("--host", default=ENGINE_DEFAULT_HOST, help="数字人引擎地址")
     parser.add_argument("--video", help="视频文件路径")
     parser.add_argument("--photo", help="照片文件路径")
     parser.add_argument("--avatar-id", default="default", help="形象ID")
