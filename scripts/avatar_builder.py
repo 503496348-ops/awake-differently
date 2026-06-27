@@ -111,7 +111,7 @@ class AvatarBuilder:
         try:
             with open(video_path, "rb") as f:
                 resp = requests.post(
-                    f"{self.host}/avatar/create",
+                    f"{self.host}/api/avatar/task",
                     files={"video": f},
                     data={
                         "avatar_id": avatar_id,
@@ -163,7 +163,7 @@ class AvatarBuilder:
         try:
             with open(photo_path, "rb") as f:
                 resp = requests.post(
-                    f"{self.host}/avatar/create",
+                    f"{self.host}/api/avatar/task",
                     files={"image": f},
                     data={
                         "avatar_id": avatar_id,
@@ -238,7 +238,7 @@ class AvatarBuilder:
         while time.time() - start < max_wait:
             try:
                 resp = requests.get(
-                    f"{self.host}/avatar/status/{task_id}",
+                    f"{self.host}/api/avatar/task/{task_id}",
                     timeout=10,
                 )
                 resp.raise_for_status()
@@ -277,18 +277,17 @@ class AvatarBuilder:
     def list_avatars(self) -> List[Dict]:
         """列出已有的数字人形象"""
         try:
-            resp = requests.get(f"{self.host}/avatar/list", timeout=10)
+            resp = requests.get(f"{self.host}/api/avatar/tasks", timeout=10)
             resp.raise_for_status()
-            return resp.json().get("data", [])
+            return resp.json().get("data", resp.json()) if isinstance(resp.json(), list) else resp.json().get("data", [])
         except Exception:
             return []
 
     def delete_avatar(self, avatar_id: str) -> bool:
         """删除数字人形象"""
         try:
-            resp = requests.post(
-                f"{self.host}/avatar/delete",
-                json={"avatar_id": avatar_id},
+            resp = requests.delete(
+                f"{self.host}/api/avatar/task/{avatar_id}",
                 timeout=10,
             )
             resp.raise_for_status()
