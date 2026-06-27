@@ -85,6 +85,18 @@ class VoiceProfile:
 
 # 音色推荐库
 # 按语言+性别+风格分类，从人格蒸馏自动匹配
+# CosyVoice 预训练音色映射
+COSYVOICE_SPEAKERS = {
+    "zh": {
+        "male": ["中文男", "zh_male"],
+        "female": ["中文女", "zh_female"],
+    },
+    "en": {
+        "male": ["英文男", "en_male"],
+        "female": ["英文女", "en_female"],
+    },
+}
+
 VOICE_RECOMMENDATIONS = {
     "zh": {
         "male": {
@@ -187,6 +199,54 @@ def recommend_voice(
     return gender_voices.get(style, gender_voices.get("default", "zh-CN-YunxiNeural"))
 
 
+# ── CosyVoice 合成 ─────────────────────────────────────────────────────────
+
+def cosyvoice_synthesize(
+    text: str,
+    profile: VoiceProfile,
+    output_path: str = "output.wav",
+    opus: bool = False,
+) -> str:
+    """
+    使用 CosyVoice 合成语音。
+
+    Args:
+        text: 要合成的文本
+        profile: 声音画像
+        output_path: 输出文件路径
+        opus: 是否输出 Opus 格式（飞书语音气泡）
+
+    Returns:
+        输出文件路径
+    """
+    from cosyvoice_backend import CosyVoiceBackend, CosyVoiceConfig
+
+    config = CosyVoiceConfig(
+        model_dir=profile.voice_id if profile.engine == "cosyvoice" and "/" in profile.voice_id
+        else "pretrained_models/Fun-CosyVoice3-0.5B",
+        speed=profile.speed,
+    )
+    backend = CosyVoiceBackend(config)
+    backend.load()
+
+    if profile.reference_audio and os.path.exists(profile.reference_audio):
+        # 声音克隆模式
+        result = backend.synthesize_clone(
+            text,
+            prompt_audio=profile.reference_audio,
+            prompt_text=profile.reference_text or "",
+            speed=profile.speed,
+        )
+    else:
+        # 预训练音色模式
+        speaker = COSYVOICE_SPEAKERS.get(profile.language, {}).get(profile.gender, [None])[0]
+        result = backend.synthesize(text, speaker=speaker, speed=profile.speed)
+
+    if opus:
+        return result.save_opus(output_path.replace('.wav', '.opus'))
+    return result.save_wav(output_path)
+
+
 # ── 声音画像工厂 ──────────────────────────────────────────────────────────────
 
 def create_voice_profile_from_persona(
@@ -228,7 +288,7 @@ def create_voice_profile_from_persona(
 
     # 如果有参考音频，切换到声音克隆引擎
     if reference_audio and os.path.exists(reference_audio):
-        engine = "sovits"  # GPT-SoVITS
+        engine = "cosyvoice"  # CosyVoice（默认推荐，质量最佳）
 
     profile = VoiceProfile(
         name=f"{name}的声音",

@@ -164,3 +164,50 @@ python3 init_digital_human.py --name "你的名字" --input chat_export.json --p
 - [ ] 3. 执行核心功能
 - [ ] 4. 验证输出结果
 - [ ] 5. 反馈给用户
+
+## CosyVoice 集成 (v2.1.0)
+
+### 新增能力
+- **CosyVoice TTS 后端** — 阿里FunAudioLLM出品，中文质量最佳
+- **4种推理模式**：预训练音色 / 3秒极速克隆 / 跨语种复刻 / 自然语言控制
+- **飞书语音气泡** — 自动转Opus格式，支持飞书原生语音消息
+- **零样本声音克隆** — 3秒参考音频即可克隆任意声音
+
+### 快速使用
+
+```bash
+# 预训练音色
+python3 scripts/cosyvoice_backend.py --text "你好世界" --speaker 中文女 --output output.wav
+
+# 声音克隆
+python3 scripts/cosyvoice_backend.py --text "你好世界" --clone-audio speaker.wav --clone-text "参考文本" --output cloned.wav
+
+# 飞书语音气泡（Opus格式）
+python3 scripts/cosyvoice_backend.py --text "你好世界" --opus --output output.opus
+
+# 列出可用音色
+python3 scripts/cosyvoice_backend.py --list-speakers
+```
+
+### Python API
+
+```python
+from scripts.cosyvoice_backend import CosyVoiceBackend, CosyVoiceConfig
+
+backend = CosyVoiceBackend(CosyVoiceConfig(model_dir="pretrained_models/Fun-CosyVoice3-0.5B"))
+backend.load()
+
+# 预训练
+result = backend.synthesize("你好世界", speaker="中文女")
+result.save_wav("output.wav")
+result.save_opus("output.opus")  # 飞书语音气泡
+
+# 克隆
+result = backend.synthesize_clone("你好世界", "speaker.wav", "参考文本")
+```
+
+### 环境要求
+- GPU: RTX 3060+ (推荐) / CPU (可用但慢)
+- Python: 3.10+
+- ffmpeg: opus转换需要
+- CosyVoice: `pip install -e .` from CosyVoice repo
