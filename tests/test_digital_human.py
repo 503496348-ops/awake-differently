@@ -26,6 +26,8 @@ from digital_avatar import (
     AvatarModel,
     TTSEngine,
     OutputMode,
+    BackendType,
+    DIDClient,
     DigitalAvatarManager,
 )
 from voice_profile import (
@@ -222,3 +224,14 @@ class TestAvatarConfig(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestDIDClient(unittest.TestCase):
+
+    def test_init(self):
+        client = DIDClient("test-key")
+        self.assertEqual(client.api_key, "test-key")
+
+    def test_backend_type_enum(self):
+        self.assertEqual(BackendType.LOCAL.value, "local")
+        self.assertEqual(BackendType.DID.value, "did")
