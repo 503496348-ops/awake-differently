@@ -1,8 +1,8 @@
 ---
 name: awake-differently
-description: "基于聊天记录深度蒸馏的数字分身/人物画像系统。当需要从聊天记录中提取人物特征、生成数字分身、分析用户画像时使用。"
+description: "基于聊天记录深度蒸馏的数字人系统。人格蒸馏+声音克隆+数字形象+实时交互四合一。当需要从聊天记录中提取人物特征、生成数字分身、创建数字人、实时对话交互时使用。"
 argument-hint: "[question or task]"
-version: 1.1.0
+version: 2.0.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, Bash, WebSearch, WebFetch
 author: "AtomCollide-团队"
@@ -11,6 +11,14 @@ triggers:
   - 身份蒸馏
   - AI persona
   - digital twin
+  - 数字人
+  - digital human
+  - 数字分身
+  - 虚拟形象
+  - 声音克隆
+  - voice clone
+  - 实时对话
+  - 数字人直播
   - awake
   - 别样觉醒
 ---
@@ -88,6 +96,9 @@ triggers:
 | `persona.md` | 完整人格分层定义（5层结构 + 置信度标注） |
 | `work.md` | 工作能力、技术栈、决策流程 |
 | `distillation.md` | 原始蒸馏数据（646条消息分析报告） |
+| `scripts/digital_avatar.py` | 数字人引擎（融合自 LiveTalking） |
+| `scripts/voice_profile.py` | 声音画像+音色推荐 |
+| `scripts/avatar_builder.py` | 数字人形象生成 |
 
 ## 数据来源与置信度
 
@@ -104,7 +115,9 @@ triggers:
 
 我们相信：每个人的行为模式、决策逻辑和表达风格，都可以通过大规模对话数据被深度理解并复现。这不是模仿，是觉醒——让 AI 真正"成为"一个人，而不只是"扮演"一个人。
 
-**方法论**：聊天记录采集 → 行为模式提取 → 人格分层建模 → 数字分身生成 → 持续进化
+**方法论**：聊天记录采集 → 行为模式提取 → 人格分层建模 → 声音画像 → 数字形象 → 实时数字人
+
+**技术栈**：人格蒸馏(自有) + LiveTalking(实时引擎) + GPT-SoVITS(声音克隆) + Wav2Lip/MuseTalk(口型同步)
 
 **出品方**：AtomCollide-团队
 
