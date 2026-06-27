@@ -184,7 +184,7 @@ class StyleFidelityEvaluator:
     """Evaluate writing style fidelity between original and persona output."""
 
     # Dimension weights
-    WEIGHT = 0.25
+    WEIGHT = 0.20
 
     def evaluate(self, original_messages: List[dict], persona_outputs: List[str]) -> DimensionScore:
         """Compare writing style metrics between original and persona."""
@@ -280,7 +280,7 @@ class StyleFidelityEvaluator:
 class VocabularyFidelityEvaluator:
     """Evaluate vocabulary and phrase fidelity."""
 
-    WEIGHT = 0.20
+    WEIGHT = 0.15
 
     def evaluate(self, original_messages: List[dict], persona_outputs: List[str], persona_config: dict = None) -> DimensionScore:
         """Compare vocabulary fingerprint between original and persona."""
@@ -374,7 +374,7 @@ class VocabularyFidelityEvaluator:
 class BehavioralFidelityEvaluator:
     """Evaluate behavioral pattern fidelity."""
 
-    WEIGHT = 0.20
+    WEIGHT = 0.15
 
     def evaluate(self, original_messages: List[dict], behavior_patterns: dict = None) -> DimensionScore:
         """Evaluate if extracted behavior patterns match original data."""
@@ -646,6 +646,130 @@ class EmotionalFidelityEvaluator:
         )
 
 
+
+# ─── Robustness Fidelity Evaluator ──────────────────────────────────────────
+
+class RobustnessFidelityEvaluator:
+    """Evaluate persona robustness under adversarial/noisy conditions.
+
+    Tests:
+    1. Noise Resilience — catchphrase length and specificity
+    2. Data Diversity — unique message ratio
+    3. Temporal Coverage — days spanned
+    4. Length Variance — message pattern diversity
+    """
+
+    WEIGHT = 0.15
+
+    def evaluate(self, original_messages: List[dict], persona_outputs: List[str] = None, persona_config: dict = None) -> DimensionScore:
+        """Evaluate robustness of persona definition."""
+        evidence = []
+        details = {}
+        scores = []
+
+        if not original_messages:
+            return DimensionScore(
+                dimension="鲁棒性", score=0.0, weight=self.WEIGHT,
+                details={"error": "无原始消息"},
+            )
+
+        orig_texts = [m.get("text", "") for m in original_messages if m.get("text")]
+        if not orig_texts:
+            return DimensionScore(
+                dimension="鲁棒性", score=0.0, weight=self.WEIGHT,
+                details={"error": "无文本内容"},
+            )
+
+        # 1. Noise resilience — robust features vs fragile ones
+        if persona_config:
+            catchphrases = persona_config.get("catchphrases", [])
+            signature_phrases = persona_config.get("signature_phrases", [])
+
+            if catchphrases:
+                avg_len = sum(len(p) for p in catchphrases) / len(catchphrases)
+                robustness = min(avg_len / 4.0, 1.0)
+                scores.append(robustness)
+                details["catchphrase_robustness"] = {
+                    "avg_length": round(avg_len, 1),
+                    "score": round(robustness * 100, 1),
+                    "examples": catchphrases[:5],
+                }
+                evidence.append(f"口头禅平均长度{avg_len:.1f}字，抗噪性{'好' if robustness > 0.7 else '一般'}")
+
+            if signature_phrases:
+                common_words = {"的", "是", "不", "在", "有", "我", "你", "他", "她", "这", "那", "了", "吗"}
+                fragile = [p for p in signature_phrases if p in common_words]
+                fragility = len(fragile) / len(signature_phrases)
+                robustness = 1.0 - fragility
+                scores.append(robustness)
+                details["signature_phrase_robustness"] = {
+                    "total": len(signature_phrases),
+                    "fragile": len(fragile),
+                    "fragile_examples": fragile[:5],
+                    "score": round(robustness * 100, 1),
+                }
+                evidence.append(f"特征词{len(signature_phrases)}个，{len(fragile)}个为高频词(易误判)")
+
+        # 2. Data diversity resilience
+        unique_msgs = len(set(orig_texts))
+        diversity = unique_msgs / max(len(orig_texts), 1)
+        scores.append(diversity)
+        details["data_diversity"] = {
+            "total": len(orig_texts),
+            "unique": unique_msgs,
+            "ratio": round(diversity * 100, 1),
+        }
+        evidence.append(f"消息多样性: {unique_msgs}/{len(orig_texts)} ({diversity:.0%})")
+
+        # 3. Temporal coverage resilience
+        dates = set()
+        for msg in original_messages:
+            ts = msg.get("timestamp", "")
+            if ts:
+                try:
+                    dates.add(ts[:10])
+                except (IndexError, ValueError):
+                    pass
+        temporal_score = min(len(dates) / 14.0, 1.0)
+        scores.append(temporal_score)
+        details["temporal_coverage"] = {
+            "days": len(dates),
+            "score": round(temporal_score * 100, 1),
+        }
+        evidence.append(f"时间跨度: {len(dates)}天")
+
+        # 4. Message length variance
+        lengths = [len(t) for t in orig_texts]
+        if len(lengths) > 1:
+            avg = sum(lengths) / len(lengths)
+            variance = sum((l - avg) ** 2 for l in lengths) / len(lengths)
+            std_dev = math.sqrt(variance)
+            cv = std_dev / avg if avg > 0 else 0
+            variance_score = min(cv / 1.5, 1.0)
+            scores.append(variance_score)
+            details["length_variance"] = {
+                "mean": round(avg, 1),
+                "std_dev": round(std_dev, 1),
+                "cv": round(cv, 2),
+                "score": round(variance_score * 100, 1),
+            }
+            evidence.append(f"消息长度变异系数: {cv:.2f}")
+
+        if not scores:
+            scores = [0.5]
+            evidence.append("数据不足，无法全面评估鲁棒性")
+
+        overall = sum(scores) / max(len(scores), 1)
+
+        return DimensionScore(
+            dimension="鲁棒性",
+            score=min(overall, 1.0),
+            weight=self.WEIGHT,
+            details=details,
+            evidence=evidence,
+        )
+
+
 # ─── Main Evaluator ──────────────────────────────────────────────────────────
 
 class PersonaFidelityEvaluator:
@@ -667,6 +791,7 @@ class PersonaFidelityEvaluator:
         self.behavior_eval = BehavioralFidelityEvaluator()
         self.decision_eval = DecisionFidelityEvaluator()
         self.emotional_eval = EmotionalFidelityEvaluator()
+        self.robustness_eval = RobustnessFidelityEvaluator()
 
     def evaluate(
         self,
@@ -709,6 +834,9 @@ class PersonaFidelityEvaluator:
 
         # 5. Emotional fidelity
         dimensions.append(self.emotional_eval.evaluate(original_messages, persona_outputs))
+
+        # 6. Robustness fidelity
+        dimensions.append(self.robustness_eval.evaluate(original_messages, persona_outputs, persona_config))
 
         # Compute overall score
         total_weight = sum(d.weight for d in dimensions)
