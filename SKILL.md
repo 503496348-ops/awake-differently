@@ -211,3 +211,63 @@ result = backend.synthesize_clone("你好世界", "speaker.wav", "参考文本")
 - Python: 3.10+
 - ffmpeg: opus转换需要
 - CosyVoice: `pip install -e .` from CosyVoice repo
+
+## 音色选择
+
+### 预训练音色
+| ID | 名称 | 语言 | 性别 | 风格 |
+|----|------|------|------|------|
+| zh_female_1 | 中文女 | zh | female | 自然 |
+| zh_female_2 | 中文女-温柔 | zh | female | 温柔 |
+| zh_male_1 | 中文男 | zh | male | 自然 |
+| zh_male_2 | 中文男-沉稳 | zh | male | 沉稳 |
+| en_female_1 | 英文女 | en | female | 自然 |
+| en_male_1 | 英文男 | en | male | 自然 |
+
+### 支持语言
+中文（普通话）、英语、日语、韩语、德语、西班牙语、法语、意大利语、俄语
+
+### 中文方言
+粤语、闽南语、四川话、东北话、上海话、天津话
+
+### 使用方式
+
+```python
+from scripts.cosyvoice_backend import CosyVoiceBackend, list_voices, get_voice_by_style
+
+# 列出所有音色
+voices = list_voices()
+voices_zh = list_voices(language='zh')
+voices_female = list_voices(gender='female')
+
+# 按风格推荐
+voice = get_voice_by_style('zh', 'female', '温柔')
+
+# 使用 Backend
+backend = CosyVoiceBackend()
+backend.load()
+result = backend.synthesize("你好世界", speaker="zh_female_2")
+result = backend.synthesize_with_style("你好世界", language='zh', gender='female', style='温柔')
+```
+
+### 自然语言控制（Instruct模式）
+
+```python
+# 用自然语言控制音色和情感
+result = backend.synthesize_instruct(
+    "你好世界",
+    instruct="用温柔的语气说，语速稍慢",
+    speaker="zh_female_1"
+)
+```
+
+### 声音克隆（3秒极速克隆）
+
+```python
+# 用任意音频克隆声音
+result = backend.synthesize_clone(
+    "你好世界",
+    prompt_audio="speaker.wav",  # 3-30秒参考音频
+    prompt_text="参考音频的文本内容"
+)
+```

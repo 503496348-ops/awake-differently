@@ -463,3 +463,125 @@ if __name__ == "__main__":
     else:
         result.save_wav(args.output)
         print(f"Saved WAV: {args.output} ({result.duration_ms:.0f}ms)")
+
+
+# ── 音色库 ────────────────────────────────────────────────────────────────
+
+# CosyVoice3 支持的语言和方言
+SUPPORTED_LANGUAGES = {
+    "zh": "中文（普通话）",
+    "en": "英语",
+    "ja": "日语",
+    "ko": "韩语",
+    "de": "德语",
+    "es": "西班牙语",
+    "fr": "法语",
+    "it": "意大利语",
+    "ru": "俄语",
+}
+
+# 中文方言/口音
+CHINESE_DIALECTS = {
+    "cantonese": "粤语",
+    "minnan": "闽南语",
+    "sichuan": "四川话",
+    "dongbei": "东北话",
+    "shanghai": "上海话",
+    "tianjin": "天津话",
+}
+
+# 预训练音色（从 CosyVoice 模型中提取）
+PRETRAINED_SPEAKERS = {
+    # 中文音色
+    "zh_female_1": {"name": "中文女", "lang": "zh", "gender": "female", "style": "自然"},
+    "zh_female_2": {"name": "中文女-温柔", "lang": "zh", "gender": "female", "style": "温柔"},
+    "zh_male_1": {"name": "中文男", "lang": "zh", "gender": "male", "style": "自然"},
+    "zh_male_2": {"name": "中文男-沉稳", "lang": "zh", "gender": "male", "style": "沉稳"},
+    # 英文音色
+    "en_female_1": {"name": "英文女", "lang": "en", "gender": "female", "style": "自然"},
+    "en_male_1": {"name": "英文男", "lang": "en", "gender": "male", "style": "自然"},
+}
+
+
+def list_voices(language: str = None, gender: str = None) -> dict:
+    """列出可用音色，支持按语言/性别筛选。
+
+    Args:
+        language: 语言代码（zh/en/ja/ko/de/es/fr/it/ru）
+        gender: 性别（male/female）
+
+    Returns:
+        音色字典 {id: {name, lang, gender, style}}
+    """
+    voices = PRETRAINED_SPEAKERS.copy()
+
+    if language:
+        voices = {k: v for k, v in voices.items() if v["lang"] == language}
+    if gender:
+        voices = {k: v for k, v in voices.items() if v["gender"] == gender}
+
+    return voices
+
+
+def get_voice_by_style(
+    language: str = "zh",
+    gender: str = "female",
+    style: str = "自然",
+) -> str:
+    """按风格推荐音色。
+
+    Args:
+        language: 语言
+        gender: 性别
+        style: 风格（自然/温柔/沉稳/活泼）
+
+    Returns:
+        音色ID
+    """
+    for vid, info in PRETRAINED_SPEAKERS.items():
+        if info["lang"] == language and info["gender"] == gender and info["style"] == style:
+            return vid
+
+    # Fallback: 返回同语言同性别的第一个
+    for vid, info in PRETRAINED_SPEAKERS.items():
+        if info["lang"] == language and info["gender"] == gender:
+            return vid
+
+    return "zh_female_1"  # Ultimate fallback
+
+
+# ── 增强 CosyVoiceBackend ──────────────────────────────────────────────────
+
+# 给 CosyVoiceBackend 添加便捷方法
+def _enhance_backend():
+    """Add convenience methods to CosyVoiceBackend."""
+
+    def list_voices_for_backend(self, language=None, gender=None):
+        """列出可用音色。"""
+        return list_voices(language, gender)
+
+    def synthesize_with_style(
+        self, text, language="zh", gender="female", style="自然",
+        speed=None, seed=None
+    ):
+        """按风格合成语音。
+
+        Args:
+            text: 文本
+            language: 语言
+            gender: 性别
+            style: 风格
+            speed: 语速
+            seed: 随机种子
+
+        Returns:
+            AudioResult
+        """
+        speaker = get_voice_by_style(language, gender, style)
+        return self.synthesize(text, speaker=speaker, speed=speed, seed=seed)
+
+    # 动态添加方法
+    CosyVoiceBackend.list_voices = list_voices_for_backend
+    CosyVoiceBackend.synthesize_with_style = synthesize_with_style
+
+_enhance_backend()
