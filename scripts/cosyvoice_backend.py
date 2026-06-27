@@ -490,37 +490,168 @@ CHINESE_DIALECTS = {
     "tianjin": "天津话",
 }
 
-# 预训练音色（从 CosyVoice 模型中提取）
+# ── 预训练音色库（60+音色，来自阿里云CosyVoice） ──────────────────────────
+# 用户只需选择"场景+风格"，系统自动推荐最佳音色
+# 详见: https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list
+
 PRETRAINED_SPEAKERS = {
-    # 中文音色
-    "zh_female_1": {"name": "中文女", "lang": "zh", "gender": "female", "style": "自然"},
-    "zh_female_2": {"name": "中文女-温柔", "lang": "zh", "gender": "female", "style": "温柔"},
-    "zh_male_1": {"name": "中文男", "lang": "zh", "gender": "male", "style": "自然"},
-    "zh_male_2": {"name": "中文男-沉稳", "lang": "zh", "gender": "male", "style": "沉稳"},
-    # 英文音色
-    "en_female_1": {"name": "英文女", "lang": "en", "gender": "female", "style": "自然"},
-    "en_male_1": {"name": "英文男", "lang": "en", "gender": "male", "style": "自然"},
+    # ═══ 社交陪伴 ═══
+    "longanyang":    {"name": "龙安洋", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "阳光大男孩", "age": "20-30", "instruct": True},
+    "longanhuan":    {"name": "龙安欢", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "欢脱元气女", "age": "20-30", "instruct": True},
+    "longanhuan_v3": {"name": "龙安欢V3", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "欢脱元气女+9方言", "age": "20-30", "instruct": True},
+    "longantai_v3":  {"name": "龙安台", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "嗲甜台湾女", "age": "20-30"},
+    "longhua_v3":    {"name": "龙华", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "元气甜美女", "age": "20-30"},
+    "longcheng_v3":  {"name": "龙橙", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "智慧青年男", "age": "25-30"},
+    "longze_v3":     {"name": "龙泽", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "温暖元气男", "age": "20-30"},
+    "longzhe_v3":    {"name": "龙哲", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "呆板大暖男", "age": "20-30"},
+    "longyan_v3":    {"name": "龙颜", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "温暖春风女", "age": "20-30"},
+    "longxing_v3":   {"name": "龙星", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "磁性理智男", "age": "25-30"},
+    "longtian_v3":   {"name": "龙天", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "浪漫风情男", "age": "25-30"},
+    "longwan_v3":    {"name": "龙婉", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "温婉邻家女", "age": "20-30"},
+    "longqiang_v3":  {"name": "龙嫱", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "浪漫风情女", "age": "25-30"},
+    "longfeifei_v3": {"name": "龙菲菲", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "甜美娇气女", "age": "20-25"},
+    "longhao_v3":    {"name": "龙浩", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "多情忧郁男", "age": "25-30"},
+    "longanrou_v3":  {"name": "龙安柔", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "温柔闺蜜女", "age": "20-30"},
+    "longhan_v3":    {"name": "龙寒", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "温暖痴情男", "age": "25-30"},
+    "longanzhi_v3":  {"name": "龙安智", "lang": "zh", "gender": "male",   "scene": "社交陪伴", "style": "睿智轻熟男", "age": "25-35"},
+    "longanling_v3": {"name": "龙安灵", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "思维灵动女", "age": "20-30"},
+    "longanya_v3":   {"name": "龙安雅", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "高雅气质女", "age": "25-35"},
+    "longanqin_v3":  {"name": "龙安亲", "lang": "zh", "gender": "female", "scene": "社交陪伴", "style": "亲和活泼女", "age": "20-30"},
+
+    # ═══ 语音助手 ═══
+    "longxiaochun_v3": {"name": "龙小淳", "lang": "zh", "gender": "female", "scene": "语音助手", "style": "知性积极女", "age": "25-30"},
+    "longxiaoxia_v3":  {"name": "龙小夏", "lang": "zh", "gender": "female", "scene": "语音助手", "style": "沉稳权威女", "age": "25-30"},
+    "longyumi_v3":     {"name": "YUMI", "lang": "zh", "gender": "female", "scene": "语音助手", "style": "正经青年女", "age": "25-30"},
+    "longanyun_v3":    {"name": "龙安昀", "lang": "zh", "gender": "male",   "scene": "语音助手", "style": "居家暖男", "age": "25-30"},
+    "longanwen_v3":    {"name": "龙安温", "lang": "zh", "gender": "female", "scene": "语音助手", "style": "优雅知性女", "age": "25-35"},
+    "longanli_v3":     {"name": "龙安莉", "lang": "zh", "gender": "female", "scene": "语音助手", "style": "利落从容女", "age": "25-35"},
+    "longanlang_v3":   {"name": "龙安朗", "lang": "zh", "gender": "male",   "scene": "语音助手", "style": "温暖春风男", "age": "25-30"},
+    "longyingmu_v3":   {"name": "龙应沐", "lang": "zh", "gender": "female", "scene": "语音助手", "style": "优雅知性女", "age": "25-30"},
+
+    # ═══ 客服 ═══
+    "longyingxun_v3":   {"name": "龙应询", "lang": "zh", "gender": "male",   "scene": "客服", "style": "年轻青涩男", "age": "20-25"},
+    "longyingjing_v3":  {"name": "龙应静", "lang": "zh", "gender": "female", "scene": "客服", "style": "低调冷静女", "age": "25-35"},
+    "longyingling_v3":  {"name": "龙应聆", "lang": "zh", "gender": "female", "scene": "客服", "style": "温和共情女", "age": "25-30"},
+    "longyingtao_v3":   {"name": "龙应桃", "lang": "zh", "gender": "female", "scene": "客服", "style": "温柔淡定女", "age": "25-30"},
+
+    # ═══ 有声书 ═══
+    "longmiao_v3":     {"name": "龙妙", "lang": "zh", "gender": "female", "scene": "有声书", "style": "抑扬顿挫女", "age": "25-30"},
+    "longsanshu_v3":   {"name": "龙三叔", "lang": "zh", "gender": "male",   "scene": "有声书", "style": "沉稳质感男", "age": "35-45"},
+    "longyuan_v3":     {"name": "龙媛", "lang": "zh", "gender": "female", "scene": "有声书", "style": "温暖治愈女", "age": "25-30"},
+    "longyue_v3":      {"name": "龙悦", "lang": "zh", "gender": "female", "scene": "有声书", "style": "温暖磁性女", "age": "25-30"},
+    "longxiu_v3":      {"name": "龙修", "lang": "zh", "gender": "male",   "scene": "有声书", "style": "博才说书男", "age": "30-40"},
+    "longnan_v3":      {"name": "龙楠", "lang": "zh", "gender": "male",   "scene": "有声书", "style": "睿智青年男", "age": "25-30"},
+    "longwanjun_v3":   {"name": "龙婉君", "lang": "zh", "gender": "female", "scene": "有声书", "style": "细腻柔声女", "age": "25-30"},
+    "longyichen_v3":   {"name": "龙逸尘", "lang": "zh", "gender": "male",   "scene": "有声书", "style": "洒脱活力男", "age": "25-30"},
+    "longlaobo_v3":    {"name": "龙老伯", "lang": "zh", "gender": "male",   "scene": "有声书", "style": "沧桑岁月爷", "age": "60+"},
+    "longlaoyi_v3":    {"name": "龙老姨", "lang": "zh", "gender": "female", "scene": "有声书", "style": "烟火从容阿姨", "age": "50+"},
+
+    # ═══ 新闻播报 ═══
+    "longshuo_v3":    {"name": "龙硕", "lang": "zh", "gender": "male",   "scene": "新闻播报", "style": "博才干练男", "age": "25-30"},
+    "longshu_v3":     {"name": "龙书", "lang": "zh", "gender": "male",   "scene": "新闻播报", "style": "沉稳青年男", "age": "25-30"},
+    "loongbella_v3":  {"name": "Bella3.0", "lang": "zh", "gender": "female", "scene": "新闻播报", "style": "精准干练女", "age": "25-30"},
+
+    # ═══ 短视频配音 ═══
+    "longjiqi_v3":    {"name": "龙机器", "lang": "zh", "gender": "male",   "scene": "短视频", "style": "呆萌机器人", "age": "N/A"},
+    "longhouge_v3":   {"name": "龙猴哥", "lang": "zh", "gender": "male",   "scene": "短视频", "style": "经典猴哥", "age": "N/A"},
+    "longdaiyu_v3":   {"name": "龙黛玉", "lang": "zh", "gender": "female", "scene": "短视频", "style": "娇率才女", "age": "20-25"},
+
+    # ═══ 直播带货 ═══
+    "longanran_v3":   {"name": "龙安燃", "lang": "zh", "gender": "female", "scene": "直播", "style": "活泼质感女", "age": "30-40"},
+    "longanxuan_v3":  {"name": "龙安宣", "lang": "zh", "gender": "female", "scene": "直播", "style": "经典直播女", "age": "30-40"},
+
+    # ═══ 电话销售 ═══
+    "longyingxiao_v3": {"name": "龙应笑", "lang": "zh", "gender": "female", "scene": "销售", "style": "清甜推销女", "age": "20-25"},
+
+    # ═══ 诗词朗诵 ═══
+    "longfei_v3":     {"name": "龙飞", "lang": "zh", "gender": "male",   "scene": "朗诵", "style": "热血磁性男", "age": "30-35"},
+
+    # ═══ 童声 ═══
+    "longhuhu_v3":    {"name": "龙呼呼", "lang": "zh", "gender": "female", "scene": "童声", "style": "天真烂漫女童", "age": "6-10", "instruct": True},
+    "longpaopao_v3":  {"name": "龙泡泡", "lang": "zh", "gender": "female", "scene": "童声", "style": "飞天泡泡音", "age": "6-10"},
+    "longjielidou_v3": {"name": "龙杰力豆", "lang": "zh", "gender": "male", "scene": "童声", "style": "阳光顽皮男", "age": "10"},
+    "longxian_v3":    {"name": "龙仙", "lang": "zh", "gender": "female", "scene": "童声", "style": "豪放可爱女", "age": "10-15"},
+    "longling_v3":    {"name": "龙铃", "lang": "zh", "gender": "female", "scene": "童声", "style": "稚气呆板女", "age": "10-15"},
+    "longshanshan_v3": {"name": "龙闪闪", "lang": "zh", "gender": "female", "scene": "童声", "style": "戏剧化童声", "age": "6-15"},
+    "longniuniu_vv3": {"name": "龙牛牛", "lang": "zh", "gender": "male",   "scene": "童声", "style": "阳光男童声", "age": "6-15"},
+
+    # ═══ 方言 ═══
+    "longjiaxin_v3":  {"name": "龙嘉欣", "lang": "zh-cantonese", "gender": "female", "scene": "方言", "style": "优雅粤语女", "age": "25-30"},
+    "longjiayi_v3":   {"name": "龙嘉怡", "lang": "zh-cantonese", "gender": "female", "scene": "方言", "style": "知性粤语女", "age": "25-30"},
+    "longanyue_v3":   {"name": "龙安粤", "lang": "zh-cantonese", "gender": "male",   "scene": "方言", "style": "欢脱粤语男", "age": "25-35"},
+    "longlaotie_v3":  {"name": "龙老铁", "lang": "zh-dongbei", "gender": "male",   "scene": "方言", "style": "东北直率男", "age": "25-30"},
+    "longshange_v3":  {"name": "龙陕哥", "lang": "zh-shaanxi", "gender": "male",   "scene": "方言", "style": "原味陕北男", "age": "25-35"},
+    "longanmin_v3":   {"name": "龙安闽", "lang": "zh-minnan", "gender": "female", "scene": "方言", "style": "清纯闽南女", "age": "18-25"},
+
+    # ═══ 出海营销（英文/日文/韩文） ═══
+    "loongabby_v3":   {"name": "Abby", "lang": "en", "gender": "female", "scene": "出海", "style": "美式英文女", "age": "30-35"},
+    "loongandy_v3":   {"name": "Andy", "lang": "en", "gender": "male",   "scene": "出海", "style": "美式英文男", "age": "30-35"},
+    "loongemily_v3":  {"name": "Emily", "lang": "en", "gender": "female", "scene": "出海", "style": "英式英文女", "age": "25-30"},
+    "loongeric_v3":   {"name": "Eric", "lang": "en", "gender": "male",   "scene": "出海", "style": "英式英文男", "age": "30-35"},
+    "loongkyong_v3":  {"name": "Kyong", "lang": "ko", "gender": "female", "scene": "出海", "style": "韩语女", "age": "25-30"},
+    "loongtomoka_v3": {"name": "Tomoka", "lang": "ja", "gender": "female", "scene": "出海", "style": "日语女", "age": "25-30"},
 }
 
 
-def list_voices(language: str = None, gender: str = None) -> dict:
-    """列出可用音色，支持按语言/性别筛选。
+def list_voices(language: str = None, gender: str = None, scene: str = None) -> dict:
+    """列出可用音色，支持按语言/性别/场景筛选。
 
     Args:
-        language: 语言代码（zh/en/ja/ko/de/es/fr/it/ru）
+        language: 语言代码（zh/en/ja/ko/zh-cantonese/zh-dongbei等）
         gender: 性别（male/female）
+        scene: 场景（社交陪伴/语音助手/客服/有声书/新闻播报/短视频/直播/销售/朗诵/童声/方言/出海）
 
     Returns:
-        音色字典 {id: {name, lang, gender, style}}
+        音色字典 {id: {name, lang, gender, style, scene, ...}}
     """
     voices = PRETRAINED_SPEAKERS.copy()
 
     if language:
-        voices = {k: v for k, v in voices.items() if v["lang"] == language}
+        voices = {k: v for k, v in voices.items() if v["lang"].startswith(language)}
     if gender:
         voices = {k: v for k, v in voices.items() if v["gender"] == gender}
+    if scene:
+        voices = {k: v for k, v in voices.items() if v.get("scene") == scene}
 
     return voices
+
+
+def list_scenes() -> list:
+    """列出所有可用场景。"""
+    scenes = set()
+    for info in PRETRAINED_SPEAKERS.values():
+        if "scene" in info:
+            scenes.add(info["scene"])
+    return sorted(scenes)
+
+
+def recommend_voice_by_text(text: str, gender: str = "female") -> str:
+    """根据文本内容自动推荐最佳音色。
+
+    分析文本特征（长度、语气、场景）推荐最适合的音色。
+    """
+    # 短句+口语化 → 社交陪伴
+    if len(text) < 50 and any(c in text for c in ["！", "？", "哈", "嘿", "哦"]):
+        if gender == "female":
+            return "longanhuan"  # 欢脱元气女
+        return "longanyang"  # 阳光大男孩
+
+    # 长文本 → 有声书
+    if len(text) > 200:
+        if gender == "female":
+            return "longmiao_v3"  # 抑扬顿挫女
+        return "longsanshu_v3"  # 沉稳质感男
+
+    # 正式内容 → 语音助手
+    if any(word in text for word in ["您好", "请问", "感谢", "服务"]):
+        if gender == "female":
+            return "longxiaochun_v3"  # 知性积极女
+        return "longanyun_v3"  # 居家暖男
+
+    # 默认
+    if gender == "female":
+        return "longanhuan"  # 欢脱元气女
+    return "longanyang"  # 阳光大男孩
 
 
 def get_voice_by_style(
