@@ -40,7 +40,7 @@ cp SKILL.md ~/.hermes/skills/awake-differently/SKILL.md
 
 ---
 
-## 本集人物简介：陈宇锋（陈龙）
+## 示例人物简介（仅供参考）
 
 | 维度 | 数据 |
 |------|------|
@@ -57,8 +57,8 @@ cp SKILL.md ~/.hermes/skills/awake-differently/SKILL.md
 
 **经典语录**：
 > "所有人都 是24小时，你要通过AI来增加你的睡眠收入"
-> "脑力收入≠体力收入"
-> "我不会，但是我可以学[机智]"
+> "示例金句"
+> "示例表达方式[机智]"
 
 ---
 
@@ -120,7 +120,7 @@ from scripts.persona_fidelity import PersonaFidelityEvaluator
 evaluator = PersonaFidelityEvaluator()
 report = evaluator.evaluate(
     original_messages=messages,
-    persona_config={"catchphrases": ["机智", "死孩子"], "decision_priority": ["变现"]},
+    persona_config={"catchphrases": ["示例口头禅1", "示例口头禅2"], "decision_priority": ["变现"]},
     persona_outputs=["这个可以搞，具体方案是……"],
 )
 print(report.summary_text())  # 综合得分 78/100 (等级C)
@@ -134,7 +134,7 @@ print(report.summary_text())  # 综合得分 78/100 (等级C)
 普通角色扮演基于描述"模拟"，别样觉醒基于数据"唤醒"。分析的是真实场景中的言行，每层人格都有数据支撑和置信度标注。
 
 **Q: 数字分身准确率有多高？**
-以陈宇锋为例，整体置信度 92%。已知局限：飞书 API 最多追溯 17 天、群聊仅反映公开社交面。置信度随数据量增加而提升。
+以示例数据为例，整体置信度 92%。已知局限：飞书 API 最多追溯 17 天、群聊仅反映公开社交面。置信度随数据量增加而提升。
 
 **Q: 可以用在哪些场景？**
 个人数字分身（用你的风格替你回复）、团队知识沉淀（核心成员经验数字化）、社群运营（真实人格的社群助手）、内容创作（一致性内容生成）。

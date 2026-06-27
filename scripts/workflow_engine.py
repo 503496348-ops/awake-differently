@@ -902,20 +902,20 @@ def run_analysis(messages: list, person_name: str = "") -> Dict[str, Any]:
 if __name__ == "__main__":
     # Demo with sample data
     test_messages = [
-        {"sender": "陈龙", "text": "好的收到", "timestamp": "2026-05-01T10:30:00"},
-        {"sender": "陈龙", "text": "这个方案可以，直接干", "timestamp": "2026-05-01T11:00:00"},
+        {"sender": "用户A", "text": "好的收到", "timestamp": "2026-05-01T10:30:00"},
+        {"sender": "用户A", "text": "这个方案可以，直接干", "timestamp": "2026-05-01T11:00:00"},
         {"sender": "PR", "text": "你觉得怎么样", "timestamp": "2026-05-01T11:05:00"},
-        {"sender": "陈龙", "text": "别催，正在谈，等我消息", "timestamp": "2026-05-01T14:00:00"},
-        {"sender": "陈龙", "text": "兄弟们！福利来了！", "timestamp": "2026-05-01T02:30:00"},
-        {"sender": "陈龙", "text": "这个死孩子，我说了多少遍", "timestamp": "2026-05-02T01:00:00"},
-        {"sender": "陈龙", "text": "版权5积分，你卖给学姐学哥10块一份", "timestamp": "2026-05-02T02:00:00"},
-        {"sender": "陈龙", "text": "我不会，但是我可以学", "timestamp": "2026-05-02T03:00:00"},
+        {"sender": "用户A", "text": "别催，正在谈，等我消息", "timestamp": "2026-05-01T14:00:00"},
+        {"sender": "用户A", "text": "示例社群消息", "timestamp": "2026-05-01T02:30:00"},
+        {"sender": "用户A", "text": "示例口头禅内容", "timestamp": "2026-05-02T01:00:00"},
+        {"sender": "用户A", "text": "示例对话内容", "timestamp": "2026-05-02T02:00:00"},
+        {"sender": "用户A", "text": "示例表达方式", "timestamp": "2026-05-02T03:00:00"},
         {"sender": "李渔樵", "text": "龙哥这个怎么搞", "timestamp": "2026-05-02T10:00:00"},
-        {"sender": "陈龙", "text": "你是真的打算一点脑子不动纯躺", "timestamp": "2026-05-02T10:05:00"},
+        {"sender": "用户A", "text": "示例对话内容", "timestamp": "2026-05-02T10:05:00"},
         {"sender": "小乖助理", "text": "音乐模型训练完了", "timestamp": "2026-05-03T01:00:00"},
-        {"sender": "陈龙", "text": "发来听听", "timestamp": "2026-05-03T01:02:00"},
+        {"sender": "用户A", "text": "发来听听", "timestamp": "2026-05-03T01:02:00"},
     ]
 
     logging.basicConfig(level=logging.INFO, format="%(name)s | %(message)s")
-    result = run_analysis(test_messages, "陈龙")
+    result = run_analysis(test_messages, "用户A")
     print(json.dumps(result, ensure_ascii=False, indent=2, default=str))

@@ -475,7 +475,7 @@ class DecisionFidelityEvaluator:
     ACTION_WORDS = {"搞", "干", "做", "来", "发", "推", "卖", "买", "谈", "定", "搞", "搞起来", "直接"}
     RISK_WORDS = {"风险", "试试", "先试试", "看看", "不一定", "可能", "也许"}
     PRAGMATIC_WORDS = {"变现", "赚钱", "收入", "利润", "成本", "投入", "产出", "ROI", "值不值"}
-    HELPER_WORDS = {"帮", "兄弟们", "大家", "团队", "一起", "分享", "福利"}
+    HELPER_WORDS = {"帮", "示例称呼", "大家", "团队", "一起", "分享", "福利"}
 
     WEIGHT = 0.20
 
@@ -566,8 +566,8 @@ class EmotionalFidelityEvaluator:
     WEIGHT = 0.15
 
     # Emotion markers
-    ENTHUSIASTIC_MARKERS = {"！", "！!", "哈哈", "太好了", "牛", "棒", "赞", "厉害", "兄弟们"}
-    CRITICAL_MARKERS = {"死孩子", "别扯", "扯淡", "狗屎", "不行", "不对", "错了"}
+    ENTHUSIASTIC_MARKERS = {"！", "！!", "哈哈", "太好了", "牛", "棒", "赞", "厉害", "示例称呼"}
+    CRITICAL_MARKERS = {"示例口头禅", "别扯", "扯淡", "狗屎", "不行", "不对", "错了"}
     WARM_MARKERS = {"兄弟", "加油", "支持", "谢谢", "辛苦", "好的", "收到"}
 
     def evaluate(self, original_messages: List[dict], persona_outputs: List[str] = None) -> DimensionScore:
@@ -778,8 +778,8 @@ class PersonaFidelityEvaluator:
     Usage:
         evaluator = PersonaFidelityEvaluator()
         report = evaluator.evaluate(
-            original_messages=[{"sender": "陈龙", "text": "...", "timestamp": "..."}],
-            persona_config={"catchphrases": ["机智", "死孩子"], "decision_priority": ["变现"]},
+            original_messages=[{"sender": "用户A", "text": "...", "timestamp": "..."}],
+            persona_config={"catchphrases": ["示例口头禅1", "示例口头禅2"], "decision_priority": ["变现"]},
             persona_outputs=["这个可以搞，具体方案是..."],
         )
         print(report.summary_text())
@@ -919,36 +919,36 @@ if __name__ == "__main__":
 
     # Demo with the Awake Differently example data
     sample_messages = [
-        {"sender": "陈龙", "text": "好的收到", "timestamp": "2026-05-01T10:30:00"},
-        {"sender": "陈龙", "text": "这个方案可以，直接干", "timestamp": "2026-05-01T11:00:00"},
+        {"sender": "用户A", "text": "好的收到", "timestamp": "2026-05-01T10:30:00"},
+        {"sender": "用户A", "text": "这个方案可以，直接干", "timestamp": "2026-05-01T11:00:00"},
         {"sender": "PR", "text": "你觉得怎么样", "timestamp": "2026-05-01T11:05:00"},
-        {"sender": "陈龙", "text": "别催，正在谈，等我消息", "timestamp": "2026-05-01T14:00:00"},
-        {"sender": "陈龙", "text": "兄弟们！福利来了！", "timestamp": "2026-05-01T02:30:00"},
-        {"sender": "陈龙", "text": "这个死孩子，我说了多少遍", "timestamp": "2026-05-02T01:00:00"},
-        {"sender": "陈龙", "text": "版权5积分，你卖给学姐学哥10块一份", "timestamp": "2026-05-02T02:00:00"},
-        {"sender": "陈龙", "text": "我不会，但是我可以学", "timestamp": "2026-05-02T03:00:00"},
+        {"sender": "用户A", "text": "别催，正在谈，等我消息", "timestamp": "2026-05-01T14:00:00"},
+        {"sender": "用户A", "text": "示例社群消息", "timestamp": "2026-05-01T02:30:00"},
+        {"sender": "用户A", "text": "示例口头禅内容", "timestamp": "2026-05-02T01:00:00"},
+        {"sender": "用户A", "text": "示例对话内容", "timestamp": "2026-05-02T02:00:00"},
+        {"sender": "用户A", "text": "示例表达方式", "timestamp": "2026-05-02T03:00:00"},
         {"sender": "李渔樵", "text": "龙哥这个怎么搞", "timestamp": "2026-05-02T10:00:00"},
-        {"sender": "陈龙", "text": "你是真的打算一点脑子不动纯躺", "timestamp": "2026-05-02T10:05:00"},
-        {"sender": "陈龙", "text": "所有人都是24小时，你要通过AI来增加你的睡眠收入", "timestamp": "2026-05-02T02:00:00"},
-        {"sender": "陈龙", "text": "脑力收入≠体力收入", "timestamp": "2026-05-03T01:00:00"},
-        {"sender": "陈龙", "text": "兄弟们！重磅福利砸过来了！", "timestamp": "2026-05-03T03:00:00"},
-        {"sender": "陈龙", "text": "这个可以搞，具体方案是……", "timestamp": "2026-05-03T04:00:00"},
+        {"sender": "用户A", "text": "示例对话内容", "timestamp": "2026-05-02T10:05:00"},
+        {"sender": "用户A", "text": "示例金句", "timestamp": "2026-05-02T02:00:00"},
+        {"sender": "用户A", "text": "示例金句", "timestamp": "2026-05-03T01:00:00"},
+        {"sender": "用户A", "text": "示例社群消息", "timestamp": "2026-05-03T03:00:00"},
+        {"sender": "用户A", "text": "这个可以搞，具体方案是……", "timestamp": "2026-05-03T04:00:00"},
         {"sender": "小乖助理", "text": "音乐模型训练完了", "timestamp": "2026-05-03T01:00:00"},
-        {"sender": "陈龙", "text": "发来听听", "timestamp": "2026-05-03T01:02:00"},
+        {"sender": "用户A", "text": "发来听听", "timestamp": "2026-05-03T01:02:00"},
     ]
 
     persona_config = {
-        "catchphrases": ["机智", "死孩子", "兄弟们"],
+        "catchphrases": ["示例口头禅1", "示例口头禅2", "示例称呼"],
         "decision_priority": ["变现", "影响力", "帮兄弟", "技术优雅"],
         "signature_phrases": ["福利", "版权", "变现", "脑力收入", "睡觉收入"],
     }
 
     persona_outputs = [
-        "兄弟们！福利来了！",
+        "示例社群消息",
         "这个可以搞，具体方案是先对接平台方",
         "你这个死孩子，我让你通过脑力赚钱",
         "别扯了，先干",
-        "版权5积分，你卖给学姐学哥10块一份",
+        "示例对话内容",
     ]
 
     evaluator = PersonaFidelityEvaluator()

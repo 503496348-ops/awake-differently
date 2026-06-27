@@ -118,10 +118,10 @@ def analyze_messages(messages: list[dict], person_name: str = "") -> PersonaProf
 
 if __name__ == "__main__":
     test_msgs = [
-        {"sender": "陈龙", "text": "好的收到", "timestamp": "2026-05-01T10:30:00"},
-        {"sender": "陈龙", "text": "这个方案可以", "timestamp": "2026-05-01T11:00:00"},
+        {"sender": "用户A", "text": "好的收到", "timestamp": "2026-05-01T10:30:00"},
+        {"sender": "用户A", "text": "这个方案可以", "timestamp": "2026-05-01T11:00:00"},
         {"sender": "PR", "text": "你觉得怎么样", "timestamp": "2026-05-01T11:05:00"},
-        {"sender": "陈龙", "text": "直接说结果吧", "timestamp": "2026-05-01T14:00:00"},
+        {"sender": "用户A", "text": "直接说结果吧", "timestamp": "2026-05-01T14:00:00"},
     ]
-    profile = analyze_messages(test_msgs, "陈龙")
+    profile = analyze_messages(test_msgs, "用户A")
     print(profile.summary())

@@ -105,7 +105,7 @@ class AwakeEngineClient:
     用法：
         client = AwakeEngineClient("http://localhost:8010")
         session = client.connect()
-        client.speak(session, "你好，我是陈龙")
+        client.speak(session, "你好，我是你的数字分身")
         client.speak(session, "今天我们聊聊AI变现", interrupt=True)
     """
 
@@ -391,7 +391,7 @@ class DigitalAvatarManager:
     用法：
         manager = DigitalAvatarManager(config)
         manager.start()
-        manager.say("你好，我是陈龙的数字分身")
+        manager.say("你好，我是你的数字分身")
         manager.say_from_persona("你觉得这个方案怎么样？")
     """
 
@@ -509,7 +509,7 @@ def main():
   python3 digital_avatar.py --check
 
   # 让数字人说话
-  python3 digital_avatar.py --say "你好，我是陈龙的数字分身"
+  python3 digital_avatar.py --say "你好，我是你的数字分身"
 
   # 用LLM对话模式
   python3 digital_avatar.py --chat "你觉得AI能变现吗？"

@@ -825,17 +825,17 @@ if __name__ == "__main__":
     # Test with sample data
     sample_chat = {
         "all_messages": [
-            {"sender": "陈龙", "text": "好的", "timestamp": "2026-05-01T10:30:00", "msg_type": "text"},
-            {"sender": "陈龙", "text": "可以", "timestamp": "2026-05-01T11:00:00", "msg_type": "text"},
+            {"sender": "用户A", "text": "好的", "timestamp": "2026-05-01T10:30:00", "msg_type": "text"},
+            {"sender": "用户A", "text": "可以", "timestamp": "2026-05-01T11:00:00", "msg_type": "text"},
             {"sender": "PR", "text": "你觉得", "timestamp": "2026-05-01T11:05:00", "msg_type": "text"},
-            {"sender": "陈龙", "text": "别催", "timestamp": "2026-05-01T14:00:00", "msg_type": "text"},
+            {"sender": "用户A", "text": "别催", "timestamp": "2026-05-01T14:00:00", "msg_type": "text"},
         ],
         "target_messages": [
-            {"sender": "陈龙", "text": "好的", "timestamp": "2026-05-01T10:30:00"},
-            {"sender": "陈龙", "text": "可以", "timestamp": "2026-05-01T11:00:00"},
-            {"sender": "陈龙", "text": "别催", "timestamp": "2026-05-01T14:00:00"},
+            {"sender": "用户A", "text": "好的", "timestamp": "2026-05-01T10:30:00"},
+            {"sender": "用户A", "text": "可以", "timestamp": "2026-05-01T11:00:00"},
+            {"sender": "用户A", "text": "别催", "timestamp": "2026-05-01T14:00:00"},
         ],
-        "person_name": "陈龙",
+        "person_name": "用户A",
         "target_count": 3,
         "total_count": 4,
     }

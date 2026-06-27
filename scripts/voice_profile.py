@@ -32,7 +32,7 @@ class VoiceProfile:
     与 persona.md 的"表达风格"对应，转化为可量化的 TTS 参数。
     """
     # 基础信息
-    name: str = ""                    # 声音名称（如"陈龙的声音"）
+    name: str = ""                    # 声音名称（如"用户A的声音"）
     language: str = "zh"              # 主要语言
     gender: str = "male"              # 性别（用于音色推荐）
 
