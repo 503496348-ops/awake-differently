@@ -108,6 +108,7 @@ triggers:
 | `scripts/digital_avatar.py` | 数字人引擎（AwakeEngine） |
 | `scripts/voice_profile.py` | 声音画像+音色推荐 |
 | `scripts/avatar_builder.py` | 数字人形象生成 |
+| `init_digital_human.py` | 一键初始化（聊天记录→完整数字人） |
 
 ## 数据来源与置信度
 
@@ -119,6 +120,15 @@ triggers:
 ---
 
 ## Quick Start
+
+### 从零创建你自己的数字人
+
+```bash
+# 一键初始化：聊天记录 → 人格画像 → 声音画像 → SKILL.md
+python3 init_digital_human.py --name "你的名字" --input chat_export.json --platform feishu
+```
+
+### 使用已有的数字人
 
 1. 检查引擎状态: `python3 scripts/digital_avatar.py --check`
 2. 生成数字人形象: `python3 scripts/avatar_builder.py --video your_video.mp4 --avatar-id my_avatar`
