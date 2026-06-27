@@ -2,7 +2,7 @@
 name: awake-differently
 description: "基于聊天记录深度蒸馏的数字人系统。人格蒸馏+声音克隆+数字形象+实时交互四合一。当需要从聊天记录中提取人物特征、生成数字分身、创建数字人、实时对话交互时使用。"
 argument-hint: "[question or task]"
-version: 2.1.0
+version: 2.2.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, Bash, WebSearch, WebFetch
 author: "AtomCollide-团队"
@@ -44,6 +44,40 @@ triggers:
 
 ---
 
+## 🚨 使用边界与法律声明
+
+### 必须遵守的使用边界
+
+1. **只能处理你自己的聊天记录**
+   - 禁止未经他人授权处理他人的聊天数据
+   - 禁止克隆他人的声音或形象
+   - 违反者承担全部法律责任
+
+2. **声音克隆的法律风险**
+   - 声音权受法律保护，未经本人授权克隆声音可能构成侵权
+   - 本工具仅限用于你自己的声音或已获授权的声音
+   - 禁止用于伪造、欺诈等非法用途
+
+3. **数字形象的法律风险**
+   - 肖像权受法律保护，未经本人授权使用他人形象可能构成侵权
+   - 本工具仅限用于你自己的形象或已获授权的形象
+   - 禁止用于伪造、欺诈等非法用途
+
+4. **人格蒸馏的安全边界**
+   - 人格蒸馏是**工具**，不是**自动运行的功能**
+   - 必须由用户**主动触发**（运行 `init_digital_human.py`）
+   - 不会自动读取或分析你的对话
+   - 不会覆盖你现有的 MEMORY.md 或 soul.md
+
+### 免责声明
+
+- 本工具仅供合法、合规的个人使用
+- 用户需自行确保使用行为符合当地法律法规
+- 开发团队不对用户的滥用行为承担责任
+- 如有任何法律疑问，请咨询专业律师
+
+---
+
 ## 核心能力
 
 | 模块 | 功能 |
@@ -69,22 +103,83 @@ triggers:
 
 ## Quick Start
 
-### 从零创建你自己的数字人
+### 方案A：轻量级（推荐，无需GPU）
+
+使用 D-ID 云端 API，无需本地 GPU：
 
 ```bash
-# 一键初始化：聊天记录 → 人格画像 → 声音画像 → 数字人
+# 1. 安装依赖（仅 Python 包，约 2 分钟）
+pip install requests
+
+# 2. 配置 D-ID API Key
+export DID_API_KEY="your_did_api_key"
+
+# 3. 生成数字人（使用 D-ID 云端）
+python3 scripts/digital_avatar.py --backend did --say "你好"
+```
+
+**优点**：无需 GPU，无需 ffmpeg，2 分钟内完成
+**缺点**：需要 D-ID API Key（免费额度有限）
+
+### 方案B：完整版（需要 GPU）
+
+使用本地 CosyVoice + AwakeEngine：
+
+```bash
+# 1. 安装系统依赖
+sudo apt install ffmpeg
+
+# 2. 安装 Python 依赖
+pip install -r requirements.txt
+
+# 3. 安装 CosyVoice（可选，用于高质量 TTS）
+git clone https://github.com/FunAudioLLM/CosyVoice.git
+cd CosyVoice && pip install -e .
+
+# 4. 生成数字人
+python3 scripts/digital_avatar.py --say "你好"
+```
+
+**优点**：完全本地化，无 API 费用
+**缺点**：需要 RTX 3060+ GPU，安装时间 30-60 分钟
+
+### 方案C：一键初始化（从聊天记录创建）
+
+```bash
+# 从聊天记录生成你自己的数字人
 python3 init_digital_human.py --name "你的名字" --input chat_export.json --platform feishu
 ```
 
-### 使用已有的数字人
+**注意**：此命令会：
+1. 分析你的聊天记录（需要你主动提供）
+2. 生成人格画像（保存在 `data/persona.yaml`）
+3. 推荐音色（基于人格特征）
+4. 生成 SKILL.md（不会覆盖你现有的身份）
 
-1. 检查引擎状态: `python3 scripts/digital_avatar.py --check`
-2. 生成数字人形象: `python3 scripts/avatar_builder.py --video your_video.mp4 --avatar-id my_avatar`
-3. 配置声音画像: `python3 scripts/voice_profile.py --recommend --language zh --gender male`
-4. 让数字人说话: `python3 scripts/digital_avatar.py --say "你好"`
-5. 实时对话: `python3 scripts/digital_avatar.py --chat "你觉得AI能变现吗？"`
+---
 
-**依赖**: Python >= 3.10, requests >= 2.28, GPU(RTX 3060+)
+## 安装路径指南
+
+### 推荐安装位置
+
+```bash
+# 方案1：作为独立技能安装（推荐）
+~/.hermes/skills/awake-differently/
+
+# 方案2：作为项目仓库安装
+~/projects/awake-differently/
+```
+
+### 避免冲突
+
+- **不要**安装在 `~/.hermes/skills/` 的子目录中（会和其他技能冲突）
+- **不要**覆盖现有的 `persona.md` 或 `work.md` 文件
+- 安装前检查是否有同名文件：
+
+```bash
+# 检查是否有冲突
+ls ~/.hermes/skills/ | grep -i "persona\|work\|distillation"
+```
 
 ---
 
