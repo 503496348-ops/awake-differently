@@ -87,6 +87,20 @@ triggers:
 | 数字形象 | 视频/照片→人脸检测→数字人形象生成 |
 | 实时交互 | WebRTC/RTMP/虚拟摄像头实时对话 |
 
+## 技术架构
+
+| 模块 | 实现 | 职责 |
+|------|------|------|
+| 人格蒸馏 | `persona_distiller.py` (1188行) | 聊天记录→行为指纹→persona.json |
+| 聊天导入 | `chat_importer.py` | 微信/Telegram/飞书多格式解析 |
+| 工作流引擎 | `workflow_engine.py` | ComfyUI风格DAG节点编排 |
+| 声音画像 | `voice_profile.py` + `cosyvoice_backend.py` | 声纹提取→CosyVoice/GPT-SoVITS TTS |
+| 数字分身 | `digital_avatar.py` | 3D形象渲染+表情驱动 |
+| 实时交互 | `realtime_interaction.py` | SSE流式对话+多模态响应 |
+| 忠实度评估 | `persona_fidelity.py` | 蒸馏质量量化评分 |
+
+Pipeline: 聊天导入 → 人格蒸馏 → 声音画像 → 数字分身 → 实时交互
+
 ## 技能文件说明
 
 | 文件 | 内容 |
@@ -101,7 +115,7 @@ triggers:
 | `scripts/benchmark.py` | 延迟与性能测试 |
 | `init_digital_human.py` | 一键初始化（聊天记录→完整数字人） |
 
-## Quick Start
+## 快速开始
 
 ### 方案A：轻量级（推荐，无需GPU）
 
